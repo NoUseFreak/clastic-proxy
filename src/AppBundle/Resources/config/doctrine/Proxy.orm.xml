@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity repository-class="AppBundle\Entity\ProxyRepository" name="AppBundle\Entity\Proxy">
+    <id name="id" type="integer" column="id">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="backend" type="string" column="backend" length="255"/>
+    <field name="port" type="integer" column="port"/>
+    <one-to-many target-entity="AppBundle\Entity\Domain" mapped-by="proxy" field="domains">
+      <cascade><cascade-all/></cascade>
+    </one-to-many>
+    <many-to-one field="node" target-entity="Clastic\NodeBundle\Entity\Node">
+      <cascade><cascade-all/></cascade>
+      <join-column name="node_id" referenced-column-name="id" />
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

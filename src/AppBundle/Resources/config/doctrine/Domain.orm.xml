@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\Domain">
+    <id name="id" type="integer" column="id">
+      <generator strategy="AUTO"/>
+    </id>
+    <field name="fqdn" type="string" column="fqdn" length="255"/>
+    <many-to-one field="proxy" target-entity="AppBundle\Entity\Proxy" inversed-by="domains">
+      <join-column name="proxy_id" referenced-column-name="id" />
+    </many-to-one>
+  </entity>
+</doctrine-mapping>
