@@ -17,5 +17,14 @@
         <service id="app_bundle.proxy_node_listener" class="AppBundle\EventListener\ProxyFormPersistListener">
             <tag name="kernel.event_subscriber"/>
         </service>
+
+        <service id="app_bundle.proxy_repo" class="AppBundle\Entity\ProxyRepository">
+            <factory service="doctrine.orm.default_entity_manager" method="getRepository"/>
+            <argument>AppBundle:Proxy</argument>
+        </service>
+
+        <service id="app_bundle.generator" class="AppBundle\Proxy\Generator">
+            <argument type="service" id="app_bundle.proxy_repo"/>
+        </service>
     </services>
 </container>

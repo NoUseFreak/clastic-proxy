@@ -128,7 +128,7 @@ class Proxy implements NodeReferenceInterface
     }
 
     /**
-     * @return Domain[]
+     * @return ArrayCollection
      */
     public function getDomains()
     {
