@@ -45,7 +45,6 @@ class ProxyFormPersistListener implements EventSubscriberInterface
         foreach ($data->getDomains() as $domain) {
             $this->original->add($domain);
         }
-
     }
 
     /**

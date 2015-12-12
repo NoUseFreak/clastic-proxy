@@ -3,9 +3,8 @@
  * Created by PhpStorm.
  * User: ddepeuter
  * Date: 12/12/15
- * Time: 00:31
+ * Time: 00:31.
  */
-
 namespace AppBundle\Command;
 
 use AppBundle\Proxy\Generator;

@@ -3,12 +3,12 @@
 namespace AppBundle\Entity;
 
 /**
- * Domain
+ * Domain.
  */
 class Domain
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -18,14 +18,9 @@ class Domain
     private $fqdn;
 
     /**
-     * @var Proxy
-     */
-    private $proxy;
-
-    /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -33,7 +28,7 @@ class Domain
     }
 
     /**
-     * Set fqdn
+     * Set fqdn.
      *
      * @param string $fqdn
      *
@@ -47,7 +42,7 @@ class Domain
     }
 
     /**
-     * Get fqdn
+     * Get fqdn.
      *
      * @return string
      */
@@ -55,21 +50,4 @@ class Domain
     {
         return $this->fqdn;
     }
-
-    /**
-     * @return Proxy
-     */
-    public function getProxy()
-    {
-        return $this->proxy;
-    }
-
-    /**
-     * @param Proxy $proxy
-     */
-    public function setProxy($proxy)
-    {
-        $this->proxy = $proxy;
-    }
 }
-

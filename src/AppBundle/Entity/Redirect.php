@@ -7,9 +7,9 @@ use Clastic\NodeBundle\Node\NodeReferenceTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Proxy.
+ * Redirect.
  */
-class Proxy implements NodeReferenceInterface, ServerInterface
+class Redirect implements NodeReferenceInterface, ServerInterface
 {
     use NodeReferenceTrait;
 
@@ -21,17 +21,7 @@ class Proxy implements NodeReferenceInterface, ServerInterface
     /**
      * @var string
      */
-    private $name;
-
-    /**
-     * @var string
-     */
-    private $backend;
-
-    /**
-     * @var int
-     */
-    private $port;
+    private $target;
 
     /**
      * @var Domain[]
@@ -57,75 +47,27 @@ class Proxy implements NodeReferenceInterface, ServerInterface
     }
 
     /**
-     * Set name.
+     * Set target.
      *
-     * @param string $name
+     * @param string $target
      *
-     * @return Proxy
+     * @return Redirect
      */
-    public function setName($name)
+    public function setTarget($target)
     {
-        $this->name = $name;
+        $this->target = $target;
 
         return $this;
     }
 
     /**
-     * Get name.
+     * Get target.
      *
      * @return string
      */
-    public function getName()
+    public function getTarget()
     {
-        return $this->name;
-    }
-
-    /**
-     * Set backend.
-     *
-     * @param string $backend
-     *
-     * @return Proxy
-     */
-    public function setBackend($backend)
-    {
-        $this->backend = $backend;
-
-        return $this;
-    }
-
-    /**
-     * Get backend.
-     *
-     * @return string
-     */
-    public function getBackend()
-    {
-        return $this->backend;
-    }
-
-    /**
-     * Set port.
-     *
-     * @param int $port
-     *
-     * @return Proxy
-     */
-    public function setPort($port)
-    {
-        $this->port = $port;
-
-        return $this;
-    }
-
-    /**
-     * Get port.
-     *
-     * @return int
-     */
-    public function getPort()
-    {
-        return $this->port;
+        return $this->target;
     }
 
     /**

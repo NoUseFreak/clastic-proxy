@@ -5,9 +5,9 @@ namespace AppBundle\Module;
 use Clastic\NodeBundle\Module\NodeModuleInterface;
 
 /**
- * Proxy.
+ * Redirect.
  */
-class ProxyModule implements NodeModuleInterface
+class RedirectModule implements NodeModuleInterface
 {
     /**
      * The name of the module.
@@ -16,7 +16,7 @@ class ProxyModule implements NodeModuleInterface
      */
     public function getName()
     {
-        return 'Proxy';
+        return 'Redirect';
     }
 
     /**
@@ -26,7 +26,7 @@ class ProxyModule implements NodeModuleInterface
      */
     public function getIdentifier()
     {
-        return 'proxy';
+        return 'redirect';
     }
 
     /**
@@ -34,7 +34,7 @@ class ProxyModule implements NodeModuleInterface
      */
     public function getEntityName()
     {
-        return 'AppBundle:Proxy';
+        return 'AppBundle:Redirect';
     }
 
     /**
@@ -42,6 +42,6 @@ class ProxyModule implements NodeModuleInterface
      */
     public function getDetailTemplate()
     {
-        return 'AppBundle:Proxy:detail.html.twig';
+        return 'AppBundle:Redirect:detail.html.twig';
     }
 }

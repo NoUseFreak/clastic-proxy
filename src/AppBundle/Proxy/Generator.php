@@ -3,31 +3,35 @@
  * Created by PhpStorm.
  * User: ddepeuter
  * Date: 12/12/15
- * Time: 00:35
+ * Time: 00:35.
  */
-
 namespace AppBundle\Proxy;
 
-
-use AppBundle\Entity\Domain;
-use AppBundle\Entity\Proxy;
-use AppBundle\Entity\ProxyRepository;
+use AppBundle\Proxy\Handler\HandlerInterface;
+use Clastic\NodeBundle\Node\NodeReferenceInterface;
 use Psr\Log\LoggerInterface;
-use RomanPitak\Nginx\Config\Directive;
 use RomanPitak\Nginx\Config\Scope;
 
 class Generator
 {
-    private $proxyRepository;
+    /**
+     * @var HandlerInterface[]
+     */
+    private $handlers;
 
-    public function __construct(ProxyRepository $proxyRepository)
+    public function __construct($handlers = [])
     {
-        $this->proxyRepository = $proxyRepository;
+        $this->handlers = $handlers;
+    }
+
+    public function addHandler(HandlerInterface $handler)
+    {
+        $this->handlers[] = $handler;
     }
 
     /**
      * @param LoggerInterface $logger
-     * @param null $outputDir
+     * @param null            $outputDir
      */
     public function generate(LoggerInterface $logger, $outputDir = null)
     {
@@ -37,49 +41,28 @@ class Generator
             $logger->notice('Cleaning dir.');
             $outputDir = realpath($outputDir).'/';
 
-            foreach(glob($outputDir.'*') as $file) {
+            foreach (glob($outputDir.'*') as $file) {
                 unlink($file);
             }
         }
 
-        /** @var Proxy $proxy */
-        foreach ($this->proxyRepository->findAll() as $proxy) {
-            $config = $this->buildProxyConfig($proxy);
+        foreach ($this->handlers as $handler) {
+            $handlerName = basename(str_replace(['\\', 'Handler'], '/', get_class($handler)));
+            $logger->notice(sprintf('Generating %s', $handlerName));
+            foreach ($handler->getRecords() as $record) {
+                $config = $handler->buildConfig($record);
 
-            if (is_null($outputDir)) {
-                echo $config->prettyPrint(-1);
-            } else {
-                $fileName = $this->createFilename($proxy);
-                $this->write($fileName, $config, $outputDir);
-                $logger->debug(sprintf('%s as %s', $proxy->getNode()->getTitle(), $fileName));
+                if (is_null($outputDir)) {
+                    echo $config->prettyPrint(-1);
+                } else {
+                    $fileName = $handlerName.'-'.$this->createFilename($record);
+                    $this->write($fileName, $config, $outputDir);
+                    $logger->debug(sprintf('%s as %s', $record->getNode()->getTitle(), $fileName));
+                }
             }
         }
 
         $logger->notice('Generate ended');
-    }
-
-    private function buildProxyConfig(Proxy $proxy)
-    {
-        return Scope::create()
-            ->addDirective(Directive::create('server')
-                ->setChildScope(Scope::create()
-                    ->addDirective(Directive::create('listen', 80))
-                    ->addDirective(Directive::create('server_name', $this->getServerName($proxy)))
-                    ->addDirective(Directive::create('location', '/', Scope::create()
-                        ->addDirective(Directive::create('proxy_pass', 'http://'.$proxy->getBackend().':'.$proxy->getPort()))
-                        ->addDirective(Directive::create('proxy_set_header', 'Host $host'))
-                        ->addDirective(Directive::create('proxy_set_header', 'X-Real-IP $remote_addr'))
-                        ->addDirective(Directive::create('proxy_set_header', 'X-Forwarded-For $proxy_add_x_forwarded_for'))
-                    ))
-                )
-            );
-    }
-
-    private function getServerName(Proxy $proxy)
-    {
-        return implode(' ', array_map(function(Domain $domain) {
-            return $domain->getFqdn();
-        }, $proxy->getDomains()->getValues()));
     }
 
     private function write($fileName, Scope $scope, $outputDir)
@@ -87,7 +70,7 @@ class Generator
         $scope->saveToFile($outputDir.$fileName);
     }
 
-    private function createFilename(Proxy $proxy)
+    private function createFilename(NodeReferenceInterface $proxy)
     {
         return preg_replace('/[^a-z\.-]+/', '-', $proxy->getNode()->getTitle().'.conf');
     }

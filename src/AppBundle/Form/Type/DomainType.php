@@ -3,9 +3,8 @@
  * Created by PhpStorm.
  * User: ddepeuter
  * Date: 11/12/15
- * Time: 22:49
+ * Time: 22:49.
  */
-
 namespace AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity repository-class="AppBundle\Entity\ProxyRepository" name="AppBundle\Entity\Proxy">
+  <entity repository-class="AppBundle\Entity\RedirectRepository" name="AppBundle\Entity\Redirect">
     <id name="id" type="integer" column="id">
       <generator strategy="AUTO"/>
     </id>
-    <field name="backend" type="string" column="backend" length="255"/>
-    <field name="port" type="integer" column="port"/>
+    <field name="target" type="string" column="target" length="255"/>
     <many-to-one field="node" target-entity="Clastic\NodeBundle\Entity\Node">
       <cascade><cascade-all/></cascade>
       <join-column name="node_id" referenced-column-name="id" />
@@ -14,12 +13,12 @@
       <cascade>
         <cascade-all/>
       </cascade>
-      <join-table name="ProxyDomains">
+      <join-table name="RedirectDomains">
         <join-columns>
           <join-column name="domain_id" referenced-column-name="id" nullable="false" unique="false" />
         </join-columns>
         <inverse-join-columns>
-          <join-column name="proxy_id" referenced-column-name="id" column-definition="INT NULL" />
+          <join-column name="redirect_id" referenced-column-name="id" column-definition="INT NULL" />
         </inverse-join-columns>
       </join-table>
     </many-to-many>

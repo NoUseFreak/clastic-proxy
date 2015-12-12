@@ -5,6 +5,8 @@
     <parameters>
         <parameter key="app_bundle.proxy.module.class">AppBundle\Module\ProxyModule</parameter>
         <parameter key="app_bundle.proxy.module.form_extension.class">AppBundle\Form\Module\ProxyFormExtension</parameter>
+        <parameter key="app_bundle.redirect.module.class">AppBundle\Module\RedirectModule</parameter>
+        <parameter key="app_bundle.redirect.module.form_extension.class">AppBundle\Form\Module\RedirectFormExtension</parameter>
     </parameters>
     <services>
         <service id="app_bundle.proxy.module" class="%app_bundle.proxy.module.class%">
@@ -18,13 +20,34 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+
+        <service id="app_bundle.redirect.module" class="%app_bundle.redirect.module.class%">
+            <tag name="clastic.module" node_module="true" alias="redirect"/>
+            <tag name="clastic.node_form" build_service="app_bundle.redirect.module.form_extension"/>
+        </service>
+        <service id="app_bundle.redirect.module.form_extension" class="%app_bundle.redirect.module.form_extension.class%">
+            <argument type="service" id="app_bundle.proxy_node_listener"/>
+        </service>
+
+        <service id="app_bundle.generator" class="AppBundle\Proxy\Generator">
+            <call method="addHandler"><argument type="service" id="app_bundle.handler.proxy"/></call>
+            <call method="addHandler"><argument type="service" id="app_bundle.handler.redirect"/></call>
+        </service>
+
+        <service id="app_bundle.handler.proxy" class="AppBundle\Proxy\Handler\ProxyHandler">
+            <argument type="service" id="app_bundle.proxy_repo"/>
+        </service>
         <service id="app_bundle.proxy_repo" class="AppBundle\Entity\ProxyRepository">
             <factory service="doctrine.orm.default_entity_manager" method="getRepository"/>
             <argument>AppBundle:Proxy</argument>
         </service>
 
-        <service id="app_bundle.generator" class="AppBundle\Proxy\Generator">
-            <argument type="service" id="app_bundle.proxy_repo"/>
+        <service id="app_bundle.handler.redirect" class="AppBundle\Proxy\Handler\RedirectHandler">
+            <argument type="service" id="app_bundle.redirect_repo"/>
+        </service>
+        <service id="app_bundle.redirect_repo" class="AppBundle\Entity\RedirectRepository">
+            <factory service="doctrine.orm.default_entity_manager" method="getRepository"/>
+            <argument>AppBundle:Redirect</argument>
         </service>
     </services>
 </container>

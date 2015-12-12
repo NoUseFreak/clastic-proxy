@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 /**
  * ProxyTypeExtension.
  */
-class ProxyFormExtension extends AbstractNodeTypeExtension
+class RedirectFormExtension extends AbstractNodeTypeExtension
 {
     private $listener;
 
@@ -28,10 +28,7 @@ class ProxyFormExtension extends AbstractNodeTypeExtension
     {
         $this->getTabHelper($builder)
             ->findTab('general')
-            ->add('backend')
-            ->add('port', 'text', [
-                'data' => 80,
-            ])
+            ->add('target')
             ->add('domains', 'collection', [
                 'type' => new DomainType(),
                 'allow_add' => true,
